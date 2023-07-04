@@ -1,5 +1,18 @@
 #include "philo.h"
 
+long long	timestamp(void)
+{
+	struct timeval	t;
+
+	gettimeofday(&t, NULL);
+	return ((t.tv_sec * 1000) + (t.tv_usec / 1000));
+}
+
+void	status(t_philo *philo, char *str)
+{
+	printf("%d is %s", philo->id, str);
+}
+
 int	ft_atoi(char *str)
 {
 	int	i;

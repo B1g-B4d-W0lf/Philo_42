@@ -1,37 +1,58 @@
 #include "philo.h"
 
-void	threadbirth(t_info *data)
+
+void	philolife(void *phi)
+{
+	t_philo	philo;
+
+	philo = (t_philo)phi;
+	while (philoalive)
+	{
+		philoeat
+			status(philo, "eating");
+		philosleep
+			status(philo, "sleeping");
+		philothink
+			status(philo, "thinking");
+	}
+	philodied
+		status(philo, "dead");
+
+}
+
+void	placeforks(t_info *data, t_philo *philo)
 {
 	int	i;
-	int	*id;
 
 	i = 0;
 	while (i < data->nop)
 	{
-		pthread_create(id[i], NULLL, void *philolife(void *arg), philo)
+		pthread_mutex_init(&philo[i].fork_l, NULL);
+		i++;
+	}
+	i = 1;
+	while (i < data->nop)
+	{
+		philo[i]->fork_r = philo[i + 1]->fork_l;
 		i++;
 	}
 }
-t_info	*parse(char **argv)
+
+void	threadbirth(t_info *data)
 {
-	t_info	data;
+	int	i;
+	t_philo	*philo;
 
-	data.nop = ft_atoi(argv[1]);
-	data.ttd = ft_atoi(argv[2]);
-	data.tte = ft_atoi(argv[3]);
-	data.tts = ft_atoi(argv[4]);
-	data.notepme = ft_atoi(argv[5]);
-	return (&data);
-}
-
-int	main(int argc, char **argv)
-{
-	t_info	*data;
-
-	if (argc < 6 || argc > 6)
+	i = 0;
+	data->start = timestamp();
+	placeforks(data, philo);
+	while (i < data->nop)
 	{
-		printf("Wrong arguments number.");
-		return (0);
+		philo[i].id = i + 1;
+		philo[i].last_eat = 0;
+		philo[i].mc = 0;
+		philo[i].data = data;
+		pthread_create(&philo[i].t_id, NULL, &philolife, &(philo[i]));
+		i++;
 	}
-	data = parse(argv);
 }

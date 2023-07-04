@@ -14,11 +14,28 @@ typedef	struct	s_info
 	int tte;
 	int	tts;
 	int	notepme;
+	int	start;
 }		t_info;
 
+typedef struct s_philo
+{
+	int						id;
+	int						last_eat;
+	int						eating;
+	int						mc;
+	pthread_t				t_id;
+	pthread_mutex_t			fork_r;
+	pthread_mutex_t			fork_l;
+	t_info					*data;
+
+}		t_philo;
 //philo.c
+void	threadbirth(t_info *data);
 
 //utils.c
-int	ft_atoi(char *str);
+int		ft_atoi(char *str);
+void	status(t_philo *philo, char *str);
+long long	timestamp(void);
+
 
 #endif
