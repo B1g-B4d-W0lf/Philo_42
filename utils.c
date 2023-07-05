@@ -3,14 +3,19 @@
 long long	timestamp(void)
 {
 	struct timeval	t;
+	long long	timeofday;
 
 	gettimeofday(&t, NULL);
-	return ((t.tv_sec * 1000) + (t.tv_usec / 1000));
+	timeofday =	(t.tv_sec * 1000) + (t.tv_usec / 1000)
+	return (timeofday);
 }
 
 void	status(t_philo *philo, char *str)
 {
-	printf("%d is %s", philo->id, str);
+	int	ms;
+
+	ms = timestamp();
+	printf("%%d d %s\n", ms, philo->id, str);
 }
 
 int	ft_atoi(char *str)

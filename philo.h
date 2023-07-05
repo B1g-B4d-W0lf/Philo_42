@@ -23,12 +23,14 @@ typedef struct s_philo
 	int						last_eat;
 	int						eating;
 	int						mc;
+	int						dead;
 	pthread_t				t_id;
 	pthread_mutex_t			fork_r;
 	pthread_mutex_t			fork_l;
 	t_info					*data;
 
 }		t_philo;
+
 //philo.c
 void	threadbirth(t_info *data);
 
