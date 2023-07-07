@@ -6,7 +6,7 @@
 /*   By: wfreulon <wfreulon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 01:45:04 by wfreulon          #+#    #+#             */
-/*   Updated: 2023/07/06 03:37:10 by wfreulon         ###   ########.fr       */
+/*   Updated: 2023/07/07 01:56:49 by wfreulon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,15 @@ void	*philolife(void *phi)
 
 	philo = (t_philo *)phi;
 	data = philo->data;
-	while (!isitdead(philo))
+	if (philo->id % 2 == 0)
 	{
-		philoeat(philo);
+		usleep(data->tte * 0.25);
+	}
+	while (!isalive(philo))
+	{
+		philoeat(philo, data->tte);
 		sleepnthink(philo, data->tts);
 	}
-	if (isitdead(philo))
-		status(philo, "is dead", philo->data);
 	return (NULL);
 }
 
@@ -42,11 +44,13 @@ void	placeforks(t_info *data, t_philo *philo)
 	i = 0;
 	while (i < data->nop - 1)
 	{
-		philo[i].fork_r = philo[i + 1].fork_l;
+		philo[i].fork_r = &philo[i + 1].fork_l;
 		i++;
 	}
 	if (data->nop > 1)
-		philo[i].fork_r = philo[0].fork_l;
+	{
+		philo[i].fork_r = &philo[0].fork_l;
+	}
 }
 
 t_philo	initphilo(t_philo philo, int i, t_info *data)
@@ -59,38 +63,31 @@ t_philo	initphilo(t_philo philo, int i, t_info *data)
 	return(philo);
 }
 
-void	undomutex(t_philo *philo, t_info *data)
-{
-	int	i;
-	
-	i = 0;
-	pthread_mutex_destroy(&data->death);
-	pthread_mutex_destroy(&data->printing);
-	while (i < data->nop)
-	{
-		pthread_mutex_destroy(&philo[i].fork_l);
-		i++;
-	}	
-}
-
 void	threadbirth(t_info *data)
 {
 	int	i;
 	t_philo	*philo;
 
 	i = 0;
-	philo = malloc(sizeof (t_philo) * data->nop + 1);
+	philo = malloc(sizeof (t_philo) * data->nop);
+	if (!philo)
+		return ;
 	while (i < data->nop)
 	{
 		philo[i] = initphilo(philo[i], i, data);
 		i++;
 	}
 	i = 0;
-
 	placeforks(data, philo);
 	while (i < data->nop)
 	{
 		pthread_create(&philo[i].t_id, NULL, philolife, &(philo[i]));
+		i++;
+	}
+	isitdead(philo, data);
+	while (i < data->nop)
+	{
+		pthread_join(philo[i].t_id, NULL);
 		i++;
 	}
 	undomutex(philo, data);

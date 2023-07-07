@@ -6,7 +6,7 @@
 /*   By: wfreulon <wfreulon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 01:45:32 by wfreulon          #+#    #+#             */
-/*   Updated: 2023/07/06 03:48:23 by wfreulon         ###   ########.fr       */
+/*   Updated: 2023/07/06 22:41:10 by wfreulon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 long long	givediff(long long i, long long j)
 {
 	long long res;
+	
 	res = i - j;
 	return(res);
 }

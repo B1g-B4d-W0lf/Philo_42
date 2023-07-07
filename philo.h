@@ -6,7 +6,7 @@
 /*   By: wfreulon <wfreulon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 01:45:41 by wfreulon          #+#    #+#             */
-/*   Updated: 2023/07/06 03:36:35 by wfreulon         ###   ########.fr       */
+/*   Updated: 2023/07/07 01:56:16 by wfreulon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define PHILO_H
 
 # include <stdio.h>
+# include <unistd.h>
 # include <stdlib.h>
 # include <string.h>
 # include <pthread.h>
@@ -29,20 +30,25 @@ typedef	struct	s_info
 	long long		start;
 	pthread_mutex_t	printing;
 	pthread_mutex_t	death;
+	pthread_mutex_t	eating;
 }		t_info;
 
 typedef struct s_philo
 {
 	int				id;
 	long long		last_eat;
-	int				eating;
+	
 	int				mc;
 	int				dead;
 	pthread_t		t_id;
-	pthread_mutex_t	fork_r;
+	pthread_mutex_t	*fork_r;
 	pthread_mutex_t	fork_l;
+
 	t_info			*data;
 }		t_philo;
+
+//main.c
+void	undomutex(t_philo *philo, t_info *data);
 
 //philo.c
 void		threadbirth(t_info *data);
@@ -54,9 +60,10 @@ long long	timestamp(void);
 long long	givediff(long long i, long long j);
 
 //living.c
-int			isitdead(t_philo *philo);
-void		philoeat(t_philo *philo);
+void		isitdead(t_philo *philo, t_info *data);
+void		philoeat(t_philo *philo, long long tte);
 void		sleepnthink(t_philo *philo, long long tts);
+int			isalive(t_philo *philo);
 
 
 #endif
