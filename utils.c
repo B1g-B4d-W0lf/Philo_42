@@ -6,37 +6,46 @@
 /*   By: wfreulon <wfreulon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 01:45:32 by wfreulon          #+#    #+#             */
-/*   Updated: 2023/07/06 22:41:10 by wfreulon         ###   ########.fr       */
+/*   Updated: 2023/07/08 01:25:31 by wfreulon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+int	ft_isdigit(int c)
+{
+	if (c >= 48 && c <= 57)
+		return (2048);
+	else
+		return (0);
+}
+
 long long	givediff(long long i, long long j)
 {
-	long long res;
-	
+	long long	res;
+
 	res = i - j;
-	return(res);
+	return (res);
 }
 
 long long	timestamp(void)
 {
 	struct timeval	t;
-	long long	timeofday;
+	long long		timeofday;
 
 	gettimeofday(&t, NULL);
-	timeofday =	(t.tv_sec * 1000) + (t.tv_usec / 1000);
+	timeofday = (t.tv_sec * 1000) + (t.tv_usec / 1000);
 	return (timeofday);
 }
 
 void	status(t_philo *philo, char *str, t_info *data)
 {
 	long int	ms;
-	
+
 	pthread_mutex_lock(&data->printing);
 	ms = timestamp() - data->start;
-	printf("%08ld %d %s\n", ms, philo->id, str);
+	if (isalive(philo))
+		printf("%08ld %d %s\n", ms, philo->id, str);
 	pthread_mutex_unlock(&data->printing);
 }
 

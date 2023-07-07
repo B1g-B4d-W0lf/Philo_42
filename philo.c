@@ -6,7 +6,7 @@
 /*   By: wfreulon <wfreulon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 01:45:04 by wfreulon          #+#    #+#             */
-/*   Updated: 2023/07/07 01:56:49 by wfreulon         ###   ########.fr       */
+/*   Updated: 2023/07/08 01:32:20 by wfreulon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,21 @@ void	*philolife(void *phi)
 
 	philo = (t_philo *)phi;
 	data = philo->data;
-	if (philo->id % 2 == 0)
+	if (philo->id % 2)
+		usleep(15000);
+	while (isalive(philo) == 1)
 	{
-		usleep(data->tte * 0.25);
-	}
-	while (!isalive(philo))
-	{
+		if (data->nop % 2)
+		{
+			if (philo->id % 2)
+				usleep(1000);
+		}
+		if(!isalive(philo))
+			break;
+		takefork(philo);
 		philoeat(philo, data->tte);
+		if(!isalive(philo))
+			break;
 		sleepnthink(philo, data->tts);
 	}
 	return (NULL);
@@ -53,19 +61,49 @@ void	placeforks(t_info *data, t_philo *philo)
 	}
 }
 
-t_philo	initphilo(t_philo philo, int i, t_info *data)
+void	isitdead(t_philo *philo, t_info	*data)
 {
-	philo.id = i + 1;
-	philo.last_eat = data->start;
-	philo.mc = 0;
-	philo.dead = 0;
-	philo.data = data;
-	return(philo);
+	int	i;
+
+	i = 0;
+	while (i < data->nop)
+	{
+		long	ms;
+	
+		if (givediff(timestamp(), philo[i].last_eat) > data->ttd)
+		{
+			pthread_mutex_lock(&data->death);
+			data->dead = 1;
+			pthread_mutex_unlock(&data->death);
+			pthread_mutex_lock(&data->printing);
+			ms = timestamp() - data->start;
+			printf("%08ld %d is dead\n", ms, philo[i].id);
+			pthread_mutex_unlock(&data->printing);
+			return ;
+		}
+		i++;
+		if(i < data->nop)
+			i = 0;
+	}
+}
+
+void	threadkill(t_philo	*philo, t_info *data)
+{
+	int	i;
+
+	i = 0;
+	isitdead(philo, data);
+	while (i < data->nop)
+	{
+		pthread_join(philo[i].t_id, NULL);
+		i++;
+	}
+	free(philo);
 }
 
 void	threadbirth(t_info *data)
 {
-	int	i;
+	int		i;
 	t_philo	*philo;
 
 	i = 0;
@@ -84,12 +122,5 @@ void	threadbirth(t_info *data)
 		pthread_create(&philo[i].t_id, NULL, philolife, &(philo[i]));
 		i++;
 	}
-	isitdead(philo, data);
-	while (i < data->nop)
-	{
-		pthread_join(philo[i].t_id, NULL);
-		i++;
-	}
-	undomutex(philo, data);
-	free(philo);
+	threadkill(philo, data);
 }

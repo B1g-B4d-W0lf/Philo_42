@@ -2,7 +2,8 @@ NAME = philo
 SRC = philo.c \
 main.c \
 utils.c \
-living.c 
+living.c \
+init.c
 HEADERFILES = -I philo.h
 OBJFILES = $(SRC:.c=.o)
 CFLAGS = -Wall -Wextra -Werror -g3

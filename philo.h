@@ -6,7 +6,7 @@
 /*   By: wfreulon <wfreulon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 01:45:41 by wfreulon          #+#    #+#             */
-/*   Updated: 2023/07/07 01:56:16 by wfreulon         ###   ########.fr       */
+/*   Updated: 2023/07/08 01:31:22 by wfreulon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,14 @@
 # include <pthread.h>
 # include <sys/time.h>
 
-typedef	struct	s_info
+typedef struct s_info
 {
 	int				nop;
 	int				ttd;
-	int 			tte;
+	int				tte;
 	int				tts;
 	int				notepme;
+	int				dead;
 	long long		start;
 	pthread_mutex_t	printing;
 	pthread_mutex_t	death;
@@ -37,9 +38,7 @@ typedef struct s_philo
 {
 	int				id;
 	long long		last_eat;
-	
 	int				mc;
-	int				dead;
 	pthread_t		t_id;
 	pthread_mutex_t	*fork_r;
 	pthread_mutex_t	fork_l;
@@ -48,9 +47,13 @@ typedef struct s_philo
 }		t_philo;
 
 //main.c
-void	undomutex(t_philo *philo, t_info *data);
+int			checkargv(char *str);
 
 //philo.c
+void		*philolife(void *phi);
+void		placeforks(t_info *data, t_philo *philo);
+void		isitdead(t_philo *philo, t_info *data);
+void		threadkill(t_philo	*philo, t_info *data);
 void		threadbirth(t_info *data);
 
 //utils.c
@@ -58,12 +61,16 @@ int			ft_atoi(char *str);
 void		status(t_philo *philo, char *str, t_info *data);
 long long	timestamp(void);
 long long	givediff(long long i, long long j);
+int			ft_isdigit(int c);
 
 //living.c
-void		isitdead(t_philo *philo, t_info *data);
 void		philoeat(t_philo *philo, long long tte);
 void		sleepnthink(t_philo *philo, long long tts);
 int			isalive(t_philo *philo);
+void		takefork(t_philo *philo);
 
+//init.c
+t_info		initdata(char **argv);
+t_philo		initphilo(t_philo philo, int i, t_info *data);
 
 #endif
