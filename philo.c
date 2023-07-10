@@ -20,20 +20,18 @@ void	*philolife(void *phi)
 	philo = (t_philo *)phi;
 	data = philo->data;
 	if (philo->id % 2)
-		usleep(15000);
-	while (isalive(philo) == 1)
+		usleep(5000);
+	while (isalive(philo))
 	{
 		if (data->nop % 2)
-		{
-			if (philo->id % 2)
-				usleep(1000);
-		}
+			usleep(20000);
 		if(!isalive(philo))
-			break;
-		takefork(philo);
+			break ;
+		if (!takefork(philo))
+			break ;
 		philoeat(philo, data->tte);
 		if(!isalive(philo))
-			break;
+			break ;
 		sleepnthink(philo, data->tts);
 	}
 	return (NULL);
@@ -82,7 +80,7 @@ void	isitdead(t_philo *philo, t_info	*data)
 			return ;
 		}
 		i++;
-		if(i < data->nop)
+		if(i == data->nop)
 			i = 0;
 	}
 }

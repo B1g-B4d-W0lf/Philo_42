@@ -64,10 +64,10 @@ long long	givediff(long long i, long long j);
 int			ft_isdigit(int c);
 
 //living.c
-void		philoeat(t_philo *philo, long long tte);
+void			philoeat(t_philo *philo, long long tte);
 void		sleepnthink(t_philo *philo, long long tts);
 int			isalive(t_philo *philo);
-void		takefork(t_philo *philo);
+int			takefork(t_philo *philo);
 
 //init.c
 t_info		initdata(char **argv);

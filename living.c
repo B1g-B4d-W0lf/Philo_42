@@ -24,9 +24,13 @@ int	isalive(t_philo *philo)
 	return (1);
 }
 
-
-void	takefork(t_philo *philo)
+int	takefork(t_philo *philo)
 {
+	if (philo->data->nop == 1)
+	{
+		status(philo, "has taken a fork", philo->data);
+		return (0);
+	}
 	if (philo->id % 2)
 	{
 		pthread_mutex_lock(&(philo->fork_l));
@@ -41,6 +45,7 @@ void	takefork(t_philo *philo)
 		pthread_mutex_lock(&(philo->fork_l));
 		status(philo, "has taken a fork", philo->data);
 	}
+	return (1);
 }
 
 void	philoeat(t_philo *philo, long long tte)
@@ -68,7 +73,7 @@ void	sleepnthink(t_philo *philo, long long tts)
 	status(philo, "is sleeping", philo->data);
 	while(givediff(timestamp(), start) <= tts)
 	{
-		if(isalive(philo) == 1)
+		if(!isalive(philo))
 			return;
 		usleep(10);
 	}

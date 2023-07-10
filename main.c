@@ -48,5 +48,9 @@ int	main(int argc, char **argv)
 		i++;
 	}
 	data = initdata(argv);
+	if (data.nop <= 0)
+	{
+		printf("Not enough Philosophers\n");
+	}
 	threadbirth(&data);
 }
