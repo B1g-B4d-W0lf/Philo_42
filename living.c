@@ -38,7 +38,7 @@ int	takefork(t_philo *philo)
 		pthread_mutex_lock((philo->fork_r));
 		status(philo, "has taken a fork", philo->data);
 	}
-	else 
+	else
 	{
 		pthread_mutex_lock((philo->fork_r));
 		status(philo, "has taken a fork", philo->data);
@@ -48,21 +48,31 @@ int	takefork(t_philo *philo)
 	return (1);
 }
 
-void	philoeat(t_philo *philo, long long tte)
+int	philoeat(t_philo *philo, long long tte)
 {
 	long long		start;
-	
+
 	start = timestamp();
 	philo->last_eat = start;
 	status(philo, "is eating", philo->data);
-	while(givediff(timestamp(), start) <= tte)
+	if (philo->mc >= 0 && philo->mc < philo->data->notepme)
+		philo->mc++;
+	while (givediff(timestamp(), start) <= tte)
 	{
 		if (!isalive(philo))
-			break;
+			break ;
 		usleep(10);
+	}
+	if (philo->mc == philo->data->notepme && philo->mc >= 0)
+	{
+		philo->data->leavingtable++;
+		pthread_mutex_unlock(&(philo->fork_l));
+		pthread_mutex_unlock((philo->fork_r));
+		return (1);
 	}
 	pthread_mutex_unlock(&(philo->fork_l));
 	pthread_mutex_unlock((philo->fork_r));
+	return (0);
 }
 
 void	sleepnthink(t_philo *philo, long long tts)
@@ -71,16 +81,11 @@ void	sleepnthink(t_philo *philo, long long tts)
 
 	start = timestamp();
 	status(philo, "is sleeping", philo->data);
-	while(givediff(timestamp(), start) <= tts)
+	while (givediff(timestamp(), start) <= tts)
 	{
-		if(!isalive(philo))
-			return;
+		if (!isalive(philo))
+			return ;
 		usleep(10);
 	}
 	status(philo, "is thinking", philo->data);
 }
-
-// 5 599 200 200 MEURENT
-// 5 610 200 200 VIVENT
-// 4 399 200 200 MEURENT
-// 4 410 200 200 VIVENT

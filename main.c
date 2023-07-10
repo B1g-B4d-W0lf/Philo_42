@@ -12,17 +12,26 @@
 
 #include "philo.h"
 
-int	checkargv(char *str)
+int	checkargv(char **str)
 {
 	int	i;
+	int	j;
 
-	i = 0;
+	i = 1;
+	j = 0;
 	while (str[i])
 	{
-		if (ft_isdigit(str[i]))
-			i++;
-		else
-			return (0);
+		while (str[i][j])
+		{
+			if (ft_isdigit(str[i][j]))
+				j++;
+			else
+			{
+				printf("Not a valid positive number: %s\n", str[i]);				
+				return (0);
+			}
+		}
+		i++;
 	}
 	return (1);
 }
@@ -30,27 +39,20 @@ int	checkargv(char *str)
 int	main(int argc, char **argv)
 {
 	t_info	data;
-	int		i;
 
-	i = 1;
 	if (argc < 5 || argc > 6)
 	{
-		printf("Wrong arguments number");
+		printf("Wrong arguments number\n");
 		return (0);
 	}
-	while (argv[i])
-	{
-		if (!checkargv(argv[i]))
-		{
-			printf("Not a valid number: %s\n", argv[i]);
+	if (!checkargv(argv))
 			return (0);
-		}
-		i++;
-	}
 	data = initdata(argv);
-	if (data.nop <= 0)
+	if (data.nop <= 0 || data.tte < 0 || data.ttd < 0 || 
+		data.tts < 0 || data.nop > 250)
 	{
-		printf("Not enough Philosophers\n");
+		printf("Invalid arguments\n");
+		return (0);
 	}
 	threadbirth(&data);
 }

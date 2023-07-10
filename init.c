@@ -25,6 +25,7 @@ t_info	initdata(char **argv)
 	else
 		data.notepme = -1;
 	data.dead = 0;
+	data.leavingtable = 0;
 	data.start = timestamp();
 	pthread_mutex_init(&data.death, NULL);
 	pthread_mutex_init(&data.printing, NULL);
@@ -36,7 +37,10 @@ t_philo	initphilo(t_philo philo, int i, t_info *data)
 {
 	philo.id = i + 1;
 	philo.last_eat = data->start;
-	philo.mc = 0;
+	if (data->notepme >= 0)
+		philo.mc = 0;
+	else
+		philo.mc = -1;
 	philo.data = data;
 	return (philo);
 }

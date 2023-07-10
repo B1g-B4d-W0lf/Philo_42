@@ -25,12 +25,13 @@ void	*philolife(void *phi)
 	{
 		if (data->nop % 2)
 			usleep(20000);
-		if(!isalive(philo))
+		if (!isalive(philo))
 			break ;
 		if (!takefork(philo))
 			break ;
-		philoeat(philo, data->tte);
-		if(!isalive(philo))
+		if (philoeat(philo, data->tte))
+			return (NULL);
+		if (!isalive(philo))
 			break ;
 		sleepnthink(philo, data->tts);
 	}
@@ -61,13 +62,12 @@ void	placeforks(t_info *data, t_philo *philo)
 
 void	isitdead(t_philo *philo, t_info	*data)
 {
-	int	i;
+	int		i;
+	long	ms;
 
 	i = 0;
 	while (i < data->nop)
 	{
-		long	ms;
-	
 		if (givediff(timestamp(), philo[i].last_eat) > data->ttd)
 		{
 			pthread_mutex_lock(&data->death);
@@ -79,8 +79,10 @@ void	isitdead(t_philo *philo, t_info	*data)
 			pthread_mutex_unlock(&data->printing);
 			return ;
 		}
+		else if (data->leavingtable == data->nop)
+			return ;
 		i++;
-		if(i == data->nop)
+		if (i == data->nop)
 			i = 0;
 	}
 }

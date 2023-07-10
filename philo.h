@@ -28,6 +28,7 @@ typedef struct s_info
 	int				tts;
 	int				notepme;
 	int				dead;
+	int				leavingtable;
 	long long		start;
 	pthread_mutex_t	printing;
 	pthread_mutex_t	death;
@@ -47,7 +48,7 @@ typedef struct s_philo
 }		t_philo;
 
 //main.c
-int			checkargv(char *str);
+int			checkargv(char **str);
 
 //philo.c
 void		*philolife(void *phi);
@@ -64,7 +65,7 @@ long long	givediff(long long i, long long j);
 int			ft_isdigit(int c);
 
 //living.c
-void			philoeat(t_philo *philo, long long tte);
+int			philoeat(t_philo *philo, long long tte);
 void		sleepnthink(t_philo *philo, long long tts);
 int			isalive(t_philo *philo);
 int			takefork(t_philo *philo);
@@ -73,4 +74,18 @@ int			takefork(t_philo *philo);
 t_info		initdata(char **argv);
 t_philo		initphilo(t_philo philo, int i, t_info *data);
 
+/*
+si nombre philo est PAIR
+	si time to eat + time to sleep + 10 >= time to die ILS VIVENT
+	sinon ils meurent
+
+si nombre philo est IMPAIR
+	si (time to eat * 2)  + time to sleep + 10 >= time to die ILS VIVENT
+	sinon ils meurent
+
+ 5 599 200 200 MEURENT
+ 5 610 200 200 VIVENT
+ 4 399 200 200 MEURENT
+ 4 410 200 200 VIVENT
+*/
 #endif
