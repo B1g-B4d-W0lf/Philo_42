@@ -6,7 +6,7 @@
 /*   By: wfreulon <wfreulon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 01:45:41 by wfreulon          #+#    #+#             */
-/*   Updated: 2023/07/08 01:31:22 by wfreulon         ###   ########.fr       */
+/*   Updated: 2023/07/11 19:54:06 by wfreulon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,10 @@ typedef struct s_info
 	int				notepme;
 	int				dead;
 	int				leavingtable;
+	int				wait;
 	long long		start;
+	pthread_mutex_t	waiting;
+	pthread_mutex_t	leaving;
 	pthread_mutex_t	printing;
 	pthread_mutex_t	death;
 	pthread_mutex_t	eating;

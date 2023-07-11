@@ -6,7 +6,7 @@
 /*   By: wfreulon <wfreulon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 01:45:04 by wfreulon          #+#    #+#             */
-/*   Updated: 2023/07/08 01:32:20 by wfreulon         ###   ########.fr       */
+/*   Updated: 2023/07/11 22:33:43 by wfreulon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,13 @@ void	*philolife(void *phi)
 
 	philo = (t_philo *)phi;
 	data = philo->data;
+
 	if (philo->id % 2)
 		usleep(5000);
 	while (isalive(philo))
 	{
 		if (data->nop % 2)
-			usleep(20000);
+			usleep(2000);
 		if (!isalive(philo))
 			break ;
 		if (!takefork(philo))
@@ -68,9 +69,10 @@ void	isitdead(t_philo *philo, t_info	*data)
 	i = 0;
 	while (i < data->nop)
 	{
+		pthread_mutex_lock(&data->death);
 		if (givediff(timestamp(), philo[i].last_eat) > data->ttd)
 		{
-			pthread_mutex_lock(&data->death);
+			
 			data->dead = 1;
 			pthread_mutex_unlock(&data->death);
 			pthread_mutex_lock(&data->printing);
@@ -80,7 +82,11 @@ void	isitdead(t_philo *philo, t_info	*data)
 			return ;
 		}
 		else if (data->leavingtable == data->nop)
+		{
+			pthread_mutex_unlock(&data->death);
 			return ;
+		}
+		pthread_mutex_unlock(&data->death);
 		i++;
 		if (i == data->nop)
 			i = 0;

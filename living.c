@@ -6,7 +6,7 @@
 /*   By: wfreulon <wfreulon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 01:44:42 by wfreulon          #+#    #+#             */
-/*   Updated: 2023/07/08 01:31:33 by wfreulon         ###   ########.fr       */
+/*   Updated: 2023/07/11 22:56:45 by wfreulon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,12 @@ int	philoeat(t_philo *philo, long long tte)
 	long long		start;
 
 	start = timestamp();
+	pthread_mutex_lock(&philo->data->eating);
 	philo->last_eat = start;
-	status(philo, "is eating", philo->data);
 	if (philo->mc >= 0 && philo->mc < philo->data->notepme)
 		philo->mc++;
+	pthread_mutex_unlock(&philo->data->eating);
+	status(philo, "is eating", philo->data);
 	while (givediff(timestamp(), start) <= tte)
 	{
 		if (!isalive(philo))
@@ -65,7 +67,9 @@ int	philoeat(t_philo *philo, long long tte)
 	}
 	if (philo->mc == philo->data->notepme && philo->mc >= 0)
 	{
+		pthread_mutex_lock(&philo->data->leaving);
 		philo->data->leavingtable++;
+		pthread_mutex_unlock(&philo->data->leaving);
 		pthread_mutex_unlock(&(philo->fork_l));
 		pthread_mutex_unlock((philo->fork_r));
 		return (1);
