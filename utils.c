@@ -6,7 +6,7 @@
 /*   By: wfreulon <wfreulon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 01:45:32 by wfreulon          #+#    #+#             */
-/*   Updated: 2023/07/08 01:25:31 by wfreulon         ###   ########.fr       */
+/*   Updated: 2023/07/12 20:18:40 by wfreulon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,11 @@ void	status(t_philo *philo, char *str, t_info *data)
 	pthread_mutex_unlock(&data->printing);
 }
 
-int	ft_atoi(char *str)
+long	ft_atoi(char *str)
 {
-	int	i;
-	int	num;
-	int	sign;
+	int		i;
+	long	num;
+	int		sign;
 
 	i = 0;
 	num = 0;
@@ -71,5 +71,7 @@ int	ft_atoi(char *str)
 		num = num * 10 + str[i] - 48;
 		i++;
 	}
+	if (num > INT_MAX)
+		return (-1);
 	return (num * sign);
 }

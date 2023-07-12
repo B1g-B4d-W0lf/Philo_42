@@ -6,7 +6,7 @@
 /*   By: wfreulon <wfreulon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 01:45:41 by wfreulon          #+#    #+#             */
-/*   Updated: 2023/07/11 19:54:06 by wfreulon         ###   ########.fr       */
+/*   Updated: 2023/07/12 22:23:21 by wfreulon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define PHILO_H
 
 # include <stdio.h>
+# include <limits.h>
 # include <unistd.h>
 # include <stdlib.h>
 # include <string.h>
@@ -46,44 +47,48 @@ typedef struct s_philo
 	pthread_t		t_id;
 	pthread_mutex_t	*fork_r;
 	pthread_mutex_t	fork_l;
-
 	t_info			*data;
 }		t_philo;
 
 //main.c
 int			checkargv(char **str);
+int			ft_strlencheck(char *str);
 
 //philo.c
-void		*philolife(void *phi);
+int			itisdead(t_philo *philo, t_info *data, int i);
 void		placeforks(t_info *data, t_philo *philo);
-void		isitdead(t_philo *philo, t_info *data);
+int			isitdead(t_philo *philo, t_info *data);
 void		threadkill(t_philo	*philo, t_info *data);
 void		threadbirth(t_info *data);
 
 //utils.c
-int			ft_atoi(char *str);
+long		ft_atoi(char *str);
 void		status(t_philo *philo, char *str, t_info *data);
 long long	timestamp(void);
 long long	givediff(long long i, long long j);
 int			ft_isdigit(int c);
 
 //living.c
+void		*philolife(void *phi);
 int			philoeat(t_philo *philo, long long tte);
 void		sleepnthink(t_philo *philo, long long tts);
 int			isalive(t_philo *philo);
 int			takefork(t_philo *philo);
 
 //init.c
+void		ft_usleep(t_philo *philo, long long start, long long ttw);
 t_info		initdata(char **argv);
 t_philo		initphilo(t_philo philo, int i, t_info *data);
 
 /*
 si nombre philo est PAIR
-	si time to eat + time to sleep + 10 >= time to die ILS VIVENT
+temps le + grand * 2
+	si time to eat *2 + time to sleep + 10 >= time to die ILS VIVENT
 	sinon ils meurent
 
 si nombre philo est IMPAIR
-	si (time to eat * 2)  + time to sleep + 10 >= time to die ILS VIVENT
+temps le + grand * 3
+	si (time to eat * 3)  + time to sleep + 10 >= time to die ILS VIVENT
 	sinon ils meurent
 
  5 599 200 200 MEURENT
