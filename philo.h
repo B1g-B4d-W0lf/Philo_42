@@ -6,7 +6,7 @@
 /*   By: wfreulon <wfreulon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 01:45:41 by wfreulon          #+#    #+#             */
-/*   Updated: 2023/07/12 22:23:21 by wfreulon         ###   ########.fr       */
+/*   Updated: 2023/07/13 00:50:42 by wfreulon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,13 +73,14 @@ void		*philolife(void *phi);
 int			philoeat(t_philo *philo, long long tte);
 void		sleepnthink(t_philo *philo, long long tts);
 int			isalive(t_philo *philo);
-int			takefork(t_philo *philo);
 
 //init.c
-void		ft_usleep(t_philo *philo, long long start, long long ttw);
 t_info		initdata(char **argv);
 t_philo		initphilo(t_philo philo, int i, t_info *data);
 
+//livingutils.c
+int			takefork(t_philo *philo);
+void		ft_usleep(t_philo *philo, long long start, long long ttw);
 /*
 si nombre philo est PAIR
 temps le + grand * 2

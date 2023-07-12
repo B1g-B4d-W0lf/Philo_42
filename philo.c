@@ -6,7 +6,7 @@
 /*   By: wfreulon <wfreulon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 01:45:04 by wfreulon          #+#    #+#             */
-/*   Updated: 2023/07/12 23:08:24 by wfreulon         ###   ########.fr       */
+/*   Updated: 2023/07/13 00:45:18 by wfreulon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ void	threadbirth(t_info *data)
 
 	i = 0;
 	philo = malloc(sizeof (t_philo) * data->nop);
+	memset(philo, 0, sizeof(t_philo) * data->nop);
 	if (!philo)
 		return ;
 	while (i < data->nop)
@@ -103,10 +104,12 @@ void	threadbirth(t_info *data)
 	}
 	i = 0;
 	placeforks(data, philo);
+	pthread_mutex_lock(&data->waiting);
 	while (i < data->nop)
 	{
 		pthread_create(&philo[i].t_id, NULL, philolife, &(philo[i]));
 		i++;
 	}
+	pthread_mutex_unlock(&data->waiting);
 	threadkill(philo, data);
 }

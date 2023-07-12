@@ -6,7 +6,7 @@
 /*   By: wfreulon <wfreulon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 01:45:32 by wfreulon          #+#    #+#             */
-/*   Updated: 2023/07/12 20:18:40 by wfreulon         ###   ########.fr       */
+/*   Updated: 2023/07/13 00:58:29 by wfreulon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	status(t_philo *philo, char *str, t_info *data)
 	pthread_mutex_lock(&data->printing);
 	ms = timestamp() - data->start;
 	if (isalive(philo))
-		printf("%08ld %d %s\n", ms, philo->id, str);
+		printf("%05ld %d %s\n", ms, philo->id, str);
 	pthread_mutex_unlock(&data->printing);
 }
 

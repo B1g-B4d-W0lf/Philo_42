@@ -3,7 +3,8 @@ SRC = philo.c \
 main.c \
 utils.c \
 living.c \
-init.c
+init.c \
+livingutils.c 
 HEADERFILES = -I philo.h
 OBJFILES = $(SRC:.c=.o)
 CFLAGS = -Wall -Wextra -Werror -g3

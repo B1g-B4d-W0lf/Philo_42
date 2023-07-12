@@ -6,22 +6,11 @@
 /*   By: wfreulon <wfreulon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 23:16:43 by wfreulon          #+#    #+#             */
-/*   Updated: 2023/07/12 20:50:05 by wfreulon         ###   ########.fr       */
+/*   Updated: 2023/07/13 00:24:02 by wfreulon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-void	ft_usleep(t_philo *philo, long long start, long long ttw)
-{
-	while (givediff(timestamp(), start) <= ttw)
-	{
-		if (!isalive(philo))
-			break ;
-		usleep(10);
-	}
-	return ;
-}
 
 t_info	initdata(char **argv)
 {
@@ -38,6 +27,8 @@ t_info	initdata(char **argv)
 	data.dead = 0;
 	data.leavingtable = 0;
 	data.start = timestamp();
+	data.wait = 0;
+	pthread_mutex_init(&data.waiting, NULL);
 	pthread_mutex_init(&data.leaving, NULL);
 	pthread_mutex_init(&data.death, NULL);
 	pthread_mutex_init(&data.printing, NULL);
