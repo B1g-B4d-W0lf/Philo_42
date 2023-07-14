@@ -42,7 +42,7 @@ int	itisdead(t_philo *philo, t_info *data, int i)
 	pthread_mutex_unlock(&data->death);
 	pthread_mutex_lock(&data->printing);
 	ms = timestamp() - data->start;
-	printf("%08ld %d is dead\n", ms, philo[i].id);
+	printf("%05ld %d is dead\n", ms, philo[i].id);
 	pthread_mutex_unlock(&data->printing);
 	return (1);
 }
