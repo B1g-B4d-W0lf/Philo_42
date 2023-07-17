@@ -6,7 +6,7 @@
 /*   By: wfreulon <wfreulon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 01:44:42 by wfreulon          #+#    #+#             */
-/*   Updated: 2023/07/13 00:45:40 by wfreulon         ###   ########.fr       */
+/*   Updated: 2023/07/15 19:44:23 by wfreulon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,22 @@ void	sleepnthink(t_philo *philo, long long tts)
 	status(philo, "is thinking", philo->data);
 }
 
+int	whilelife(t_philo *philo, t_info *data)
+{
+	if (data->nop % 2)
+		ft_usleep(philo, timestamp(), data->ttd * 0.2);
+	if (!isalive(philo))
+		return (0);
+	if (!takefork(philo))
+		return (0);
+	if (philoeat(philo, data->tte))
+		return (0);
+	if (!isalive(philo))
+		return (0);
+	sleepnthink(philo, data->tts);
+	return (1);
+}
+
 void	*philolife(void *phi)
 {
 	t_philo	*philo;
@@ -69,22 +85,15 @@ void	*philolife(void *phi)
 	data = philo->data;
 	pthread_mutex_lock(&data->waiting);
 	pthread_mutex_unlock(&data->waiting);
+	pthread_mutex_lock(&data->eating);
 	philo->last_eat = timestamp();
+	pthread_mutex_unlock(&data->eating);
 	if (philo->id % 2)
 		ft_usleep(philo, timestamp(), data->tte * 0.25);
 	while (isalive(philo))
 	{
-		if (data->nop % 2)
-			ft_usleep(philo, timestamp(), data->ttd * 0.2);
-		if (!isalive(philo))
+		if (!whilelife(philo, data))
 			break ;
-		if (!takefork(philo))
-			break ;
-		if (philoeat(philo, data->tte))
-			return (NULL);
-		if (!isalive(philo))
-			break ;
-		sleepnthink(philo, data->tts);
 	}
 	return (NULL);
 }
